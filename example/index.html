@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Table Test</title>
+  </head>
+  <body>
+    <style>
+      .cdtable.loading {
+        background: red;
+      }
+    </style>
+    <div id="cdtable-filter-container"></div>
+    <div class="cdtable" id="cdtable-container"></div>
+    <script src="//cdn.bootcss.com/jquery/3.0.0-beta1/jquery.js"></script>
+    <script src="/dist/cdtable.js"></script>
+
+    <script type="text/javascript">
+      var headerRow = function () {
+          return [
+            '<th>手机</th>',
+            '<th>邮箱</th>',
+            '<th>注册时间</th>',
+            '<th>最近访问</th>',
+            '<th>历史访问次数</th>',
+            '<th>观看课程章数</th>',
+            '<th>观看课程次数</th>',
+            '<th>总观看时长</th>',
+            '<th>评论数</th>',
+            '<th>提问数</th>',
+            '<th>笔记数</th>',
+            '<th>发帖数</th>',
+          ].join('');
+      }
+
+      var rows = function (item) {
+        return [
+            '<td>'+ item.profile_telephone +'</td>',
+            '<td>'+ item.profile_email +'</td>',
+            '<td>'+ item.profile_user_join_time +'</td>',
+            '<td>'+ item.profile_last_login +'</td>',
+            '<td>'+ item.profile_visit_times +'</td>',
+            '<td>'+ item.profile_course_number +'</td>',
+            '<td>'+ item.profile_course_watch_times +'</td>',
+            '<td>'+ item.profile_watch_time +'</td>',
+            '<td>'+ item.profile_comment_number +'</td>',
+            '<td>'+ item.profile_asking_number +'</td>',
+            '<td>'+ item.profile_note_number +'</td>',
+            '<td>'+ item.profile_forum_number +'</td>',
+          ].join('');
+      }
+
+      var getUrl = function (data) {
+        return '/api';
+      }
+
+      var getRowsData = function (json) {
+        if (json.profile_visit_time) {
+          return json.profile_visit_time;
+        } else {
+          return false;
+        }
+      }
+
+      var addonFilter = new cdtable.addons.Filter({
+        container: '#cdtable-filter-container',
+        filters: [
+          {
+            name: 'usertype',
+            datas: [
+              { name: '不限', value: '0' },
+              { name: '僵尸用户', value: '1' },
+              { name: '活跃用户', value: '2' }
+            ]
+          },
+          {
+            name: 'buytype',
+            datas: [
+              { name: '不限', value: '0' },
+              { name: '待宰用户', value: '1' },
+              { name: '黄金用户', value: '2' }
+            ]
+          }
+        ]
+      });
+
+      $('#cdtable-container').cdtable({
+        headerRow: headerRow,
+        rows: rows,
+        getUrl: getUrl,
+        getRowsData: getRowsData
+      }).cdtable().setAddons({
+        filter: addonFilter
+      }).getTable();
+
+    </script>
+  </body>
+</html>

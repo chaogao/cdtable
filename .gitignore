@@ -1,0 +1,8 @@
+node_modules
+*.pyc
+*.log
+*.swp
+*~
+.idea
+
+commit.sh
