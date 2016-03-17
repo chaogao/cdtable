@@ -237,33 +237,6 @@
    *   return false
    * }
    *
-   * @param {object}   option.filterSetting 筛选相关的配置参数
-   * @param {bool}     option.filterSetting.enable 是否启用筛选功能
-   * @param {string}   option.filterSetting.container 筛选功能的 container 
-   * @param {[filterItem]} option.filterSetting.filters 筛选相关配置数组
-   * eg. [{
-   *   name: 'usertype',
-   *   datas: [
-   *     { name: '不限', value: '0' },
-   *     { name: '僵尸用户', value: '1' },
-   *     { name: '黄金用户', value: '2' }
-   *   ]
-   * }] 
-   *
-   * @param {object}   option.paginationSetting 翻页相关配置参数
-   * @param {bool}     option.paginationSetting.enable    是否启用翻页功能
-   * @param {bool}     option.paginationSetting.container 筛选功能的 container
-   * @param {function} option.paginationSetting.callback  返回总页数，当前页数，每页显示个数信息
-   * eg. function (json) {
-   *   return {
-   *     total: json.total_page_number,
-   *     current: json.current_page_number,
-   *     count: json.per_page_counts
-   *   }
-   * }
-   *
-   * @param {object} option.customColumn
-   * @param {bool}   option.customColumn.enable 是否启用自定义列功能
    *
    */
   $.fn.cdtable = function (option) {

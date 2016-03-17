@@ -242,33 +242,6 @@
    *   return false
    * }
    *
-   * @param {object}   option.filterSetting 筛选相关的配置参数
-   * @param {bool}     option.filterSetting.enable 是否启用筛选功能
-   * @param {string}   option.filterSetting.container 筛选功能的 container 
-   * @param {[filterItem]} option.filterSetting.filters 筛选相关配置数组
-   * eg. [{
-   *   name: 'usertype',
-   *   datas: [
-   *     { name: '不限', value: '0' },
-   *     { name: '僵尸用户', value: '1' },
-   *     { name: '黄金用户', value: '2' }
-   *   ]
-   * }] 
-   *
-   * @param {object}   option.paginationSetting 翻页相关配置参数
-   * @param {bool}     option.paginationSetting.enable    是否启用翻页功能
-   * @param {bool}     option.paginationSetting.container 筛选功能的 container
-   * @param {function} option.paginationSetting.callback  返回总页数，当前页数，每页显示个数信息
-   * eg. function (json) {
-   *   return {
-   *     total: json.total_page_number,
-   *     current: json.current_page_number,
-   *     count: json.per_page_counts
-   *   }
-   * }
-   *
-   * @param {object} option.customColumn
-   * @param {bool}   option.customColumn.enable 是否启用自定义列功能
    *
    */
   $.fn.cdtable = function (option) {
@@ -569,13 +542,13 @@
   var TPL_DATE  = '<div class="cdtable-date-container">' +
     '<input class="cdtable-date-start" name="cdtable-date-start" readonly placeholder="<%= placeholderStart %>" /> - ' +
     '<input class="cdtable-date-end" name="cdtable-date-end" readonly placeholder="<%= placeholderEnd %>" />' +
-    '<a href="javascript:void(0);" class="cdtable-date-action">最大日期范围</a>' +
-    '<a href="javascript:void(0);" class="cdtable-date-remove-action">清空</a>' +
+    '<a href="javascript:void(0);" class="cdtable-date-action"><%= btnRange %></a>' +
+    '<a href="javascript:void(0);" class="cdtable-date-remove-action"><%= btnRemove %></a>' +
   '</div>'; 
 
   var _option = {
-    btnText: '确认',
-    val: '',
+    btnRange: '最大日期范围',
+    btnRemove: '清空',
     placeholderStart: '起始日期',
     placeholderEnd: '结束日期',
     startMin: '2015/12/01'
@@ -584,11 +557,15 @@
   /**
    * DatePicker addon 插件依赖日历控件，依赖 datetimepicker
    * @param {object} option 日历相关参数
-   * @param {string} option.container     日历功能的 container 
-   * @param {object} option.start         默认查询开始日期
-   * @param {object} option.end           默认查询结束日期
-   * @param {string} option.startMin      开始日期的最小值
-   * @param {string} [option.btnText=确认] btn 的文案
+   * @param {string} option.container        日历功能的 container 
+   * @param {object} option.start            默认查询开始日期
+   * @param {object} option.end              默认查询结束日期
+   * @param {string} option.startMin         开始日期的最小值
+   * @param {bool}   option.showRangeBtn     是否显示 rangebtn 
+   * @param {string} option.placeholderStart 开始 input placeholder 
+   * @param {string} option.placeholderEnd   结束 input placeholder
+   * @param {string} option.btnRange         rangebtn 文案
+   * @param {string} option.btnRemove        removeBtn 文案
    */
   var DatePicker = function (option) {
     this.option = $.extend({}, _option, option);
@@ -1012,14 +989,6 @@
    * @param {string} option.placeholder   input 上 placeholder 的文案
    * @param {string} option.val           input 默认 value
    * @param {string} [option.btnText=搜索] btn 的文案
-   * eg. [{
-   *   name: 'usertype',
-   *   datas: [
-   *     { name: '不限', value: '0' },
-   *     { name: '僵尸用户', value: '1' },
-   *     { name: '黄金用户', value: '2' }
-   *   ]
-   * }] 
    */
   var Search = function (option) {
     this.option = $.extend({}, _option, option);
