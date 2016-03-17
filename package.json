@@ -4,8 +4,7 @@
   "description": "custom define table , require jq , jsmod for pc. this table pulings support pagination, filter function with server side datasource. cdtable also can provide people defines custom row to display.",
   "main": "index.js",
   "scripts": {
-    "run": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "author": "gaochao",
   "license": "ISC",
