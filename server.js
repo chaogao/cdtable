@@ -5,6 +5,7 @@ var port = 8080
 var fs = require('fs');
 
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
+app.use('/libs', express.static(path.join(__dirname, 'libs')));
 
 app.use('/api', function (req, res) {
   res.sendFile(__dirname + '/example/data.json');

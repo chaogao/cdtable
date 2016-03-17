@@ -2,13 +2,13 @@
   var TPL_DATE  = '<div class="cdtable-date-container">' +
     '<input class="cdtable-date-start" name="cdtable-date-start" readonly placeholder="<%= placeholderStart %>" /> - ' +
     '<input class="cdtable-date-end" name="cdtable-date-end" readonly placeholder="<%= placeholderEnd %>" />' +
-    '<a href="javascript:void(0);" class="cdtable-date-action">最大日期范围</a>' +
-    '<a href="javascript:void(0);" class="cdtable-date-remove-action">清空</a>' +
+    '<a href="javascript:void(0);" class="cdtable-date-action"><%= btnRange %></a>' +
+    '<a href="javascript:void(0);" class="cdtable-date-remove-action"><%= btnRemove %></a>' +
   '</div>'; 
 
   var _option = {
-    btnText: '确认',
-    val: '',
+    btnRange: '最大日期范围',
+    btnRemove: '清空',
     placeholderStart: '起始日期',
     placeholderEnd: '结束日期',
     startMin: '2015/12/01'
@@ -17,11 +17,15 @@
   /**
    * DatePicker addon 插件依赖日历控件，依赖 datetimepicker
    * @param {object} option 日历相关参数
-   * @param {string} option.container     日历功能的 container 
-   * @param {object} option.start         默认查询开始日期
-   * @param {object} option.end           默认查询结束日期
-   * @param {string} option.startMin      开始日期的最小值
-   * @param {string} [option.btnText=确认] btn 的文案
+   * @param {string} option.container        日历功能的 container 
+   * @param {object} option.start            默认查询开始日期
+   * @param {object} option.end              默认查询结束日期
+   * @param {string} option.startMin         开始日期的最小值
+   * @param {bool}   option.showRangeBtn     是否显示 rangebtn 
+   * @param {string} option.placeholderStart 开始 input placeholder 
+   * @param {string} option.placeholderEnd   结束 input placeholder
+   * @param {string} option.btnRange         rangebtn 文案
+   * @param {string} option.btnRemove        removeBtn 文案
    */
   var DatePicker = function (option) {
     this.option = $.extend({}, _option, option);

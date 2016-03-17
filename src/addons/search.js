@@ -18,14 +18,6 @@
    * @param {string} option.placeholder   input 上 placeholder 的文案
    * @param {string} option.val           input 默认 value
    * @param {string} [option.btnText=搜索] btn 的文案
-   * eg. [{
-   *   name: 'usertype',
-   *   datas: [
-   *     { name: '不限', value: '0' },
-   *     { name: '僵尸用户', value: '1' },
-   *     { name: '黄金用户', value: '2' }
-   *   ]
-   * }] 
    */
   var Search = function (option) {
     this.option = $.extend({}, _option, option);

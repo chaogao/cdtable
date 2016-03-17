@@ -1,6 +1,6 @@
 依赖 jquery 的通用 table 解决方法，由控制 table 显示的主体，以及各种扩展 addons 组成
 
-[document](http://);
+[documentation](https://chaogao.gitbooks.io/cdtable-book/content/);
 
 ## 已完成插件列表
 
@@ -14,3 +14,5 @@
 * 多选框
 * 单选框
 
+
+## Sellergrowth Demo 参考：cms -> 用户行为数据页面
