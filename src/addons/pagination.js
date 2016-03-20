@@ -76,7 +76,7 @@
       var self = this;
 
       // filter 插件改变时需要重置分页
-      self.root.$el.on('cdtable.filter.change cdtable.search.change cdtable.datepicker.change', function () {
+      self.root.$el.on('cdtable.filter.change cdtable.search.change cdtable.datepicker.change cdtable.rank.change', function () {
         self.reset();
       });
     },

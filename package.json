@@ -1,6 +1,6 @@
 {
   "name": "cdtable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "custom define table , require jq , jsmod for pc. this table pulings support pagination, filter function with server side datasource. cdtable also can provide people defines custom row to display.",
   "main": "index.js",
   "scripts": {

@@ -181,6 +181,35 @@
           background: #3c8dbc;
           cursor: pointer
       }
+
+      .cdtable-rank-container ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .cdtable-rank-container ul li {
+        display: inline-block;  
+        color: #999;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+
+      .cdtable-rank-container ul li.cdtable-rank-item-active {
+        color: #3c8dbc;
+      }
+
+      .cdtable-rank-container ul li.cdtable-rank-type-asc:after {
+        display: inline-block;
+        content: "ase";
+        color: #ff5a00;
+      }
+
+      .cdtable-rank-container ul li.cdtable-rank-type-desc:after {
+        display: inline-block;
+        content: "desc";
+        color: #ff5a00;
+      }
     </style>
     <div id="cdtable-filter-container"></div>
     <div class="cdtable" id="cdtable-container"></div>
@@ -223,6 +252,7 @@
       }
 
       var getUrl = function (data) {
+        console.log(data);
         return '/api';
       }
 
@@ -268,6 +298,20 @@
         }
       });
 
+      var rankAddon = new cdtable.addons.Rank({
+        datas: [{
+          key: 'default',                  // the key of a item
+          name: 'defaul'                   // the display name of a item
+        },{
+          key: 'time',
+          name: 'time sorting',                  
+          types: [                          // type is meant to provide different way of sorting
+            cdtable.addons.Rank.Const.ASC,  // from low to high
+            cdtable.addons.Rank.Const.DESC // from high to low
+          ]
+        }]
+      });
+
       $('#cdtable-container').cdtable({
         headerRow: headerRow,
         rows: rows,
@@ -275,7 +319,7 @@
         getRowsData: getRowsData,
         tableClass: 'table table-bordered'
       }).cdtable().setAddons([
-        filterAddon, searchAddon, dateAddon, paginationAddon
+        filterAddon, searchAddon, dateAddon, paginationAddon, rankAddon
       ]).getTable();
 
     </script>
