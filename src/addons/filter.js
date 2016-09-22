@@ -14,9 +14,29 @@
     '</ul>' +
   '</div>'; 
 
+  var TPL_FILTER_LINE = '<div class="cdtable-filter-container cdtable-filter-container-line">' +
+      '<ul>' +
+        '<% for (var i = 0; i < filters.length; i++) { %>' +
+          '<li>' +
+            '<% if (filters[i].label) { %>' +
+              '<div class="cdtable-filter-select-name"><%= filters[i].label %></div>' +
+            '<% } %>' +
+            '<ul class="cdtable-filter-raw-list">' +
+              '<% for (var j = 0; j < filters[i].datas.length; j++) { %>' +
+                '<li data-name="<%= filters[i].name %>" class="cdtable-filter-raw-item <% if (j == 0) { %>cdtable-filter-raw-item-active<% } %>" data-value="<%= filters[i].datas[j].value %>">' +
+                  '<a href="javascript:void(0)"><%= filters[i].datas[j].name %></a>' +
+                '</li>' + 
+              '<% } %>' +
+            '</ul>' +
+          '</li>' +
+        '<% } %>' +
+      '</ul>' +
+    '</div>';
+
   /**
    * @param {object}   option 筛选相关的配置参数
    * @param {string}   option.container 筛选功能的 container 
+   * @param {bool}     option.line 是否使用一行一行的方式展现筛选项目 
    * @param {[filterItem]} option.filters 筛选相关配置数组
    * eg. [{
    *   name: 'usertype',
@@ -64,14 +84,28 @@
       var self = this;
 
       // 发生改变立即进行重新请求
-      self._getContainer().delegate('select', 'change', function () {
-        self.root.$el.trigger('cdtable.filter.change');
-        self.root.$el.trigger('cdtable.reflow');
-      });
+      if (self.option.line) {
+        self._getContainer().delegate('.cdtable-filter-raw-item', 'click', function () {
+          $(this).addClass('cdtable-filter-raw-item-active')
+            .siblings().removeClass('cdtable-filter-raw-item-active');
 
-      self.root.$el.on('cdtable.search.change', function () {
-        self.reset();
-      });
+          self.root.$el.trigger('cdtable.filter.change');
+          self.root.$el.trigger('cdtable.reflow');
+        });
+
+        self.root.$el.on('cdtable.search.change', function () {
+          self.reset();
+        });
+      } else {
+        self._getContainer().delegate('select', 'change', function () {
+          self.root.$el.trigger('cdtable.filter.change');
+          self.root.$el.trigger('cdtable.reflow');
+        });
+
+        self.root.$el.on('cdtable.search.change', function () {
+          self.reset();
+        });
+      }
     },
 
     /**
@@ -79,8 +113,13 @@
      */
     _getHTML: function () {
       var filters = this.option.filters;
+      var self = this;
 
-      return window.cdtable.template(TPL_FILTER, {filters: filters});
+      if (self.option.line) {
+        return window.cdtable.template(TPL_FILTER_LINE, {filters: filters});
+      } else {
+        return window.cdtable.template(TPL_FILTER, {filters: filters});
+      }
     },
 
     /**
@@ -104,10 +143,17 @@
      */
     getAddonData: function () {
       var data = {};
+      var self = this;
 
-      this._getContainer().find('select').each(function () {
-        data[$(this).prop('name')] = $(this).val();
-      });
+      if (self.option.line) {
+        this._getContainer().find('.cdtable-filter-raw-item-active').each(function () {
+          data[$(this).attr('data-name')] = $(this).attr('data-value');
+        });
+      } else {
+        this._getContainer().find('select').each(function () {
+          data[$(this).prop('name')] = $(this).val();
+        });
+      }
 
       return data;
     }

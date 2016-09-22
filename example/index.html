@@ -51,6 +51,10 @@
         margin-bottom: 10px;
       }
 
+      .cdtable-filter-container .cdtable-filter-raw-item-active a{
+        color: #fa0;        
+      }
+
       .cdtable-filter-container ul {
           list-style: none;
           padding: 0;
@@ -266,6 +270,7 @@
 
       var filterAddon = new cdtable.addons.Filter({
         container: '#cdtable-filter-container',
+        line: 1,
         filters: [
           {
             name: 'usertype',
