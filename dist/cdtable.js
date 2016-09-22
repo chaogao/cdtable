@@ -123,8 +123,6 @@
       this.__load_state = STAT_LOADING;
       this.$el.addClass('loading');
       this.$el.trigger('cdtable.startloading');
-
-      window.scrollTo(0, this.$el.offset().top - 10);
     },
 
     /**
@@ -164,7 +162,7 @@
             self.option.headerRow(rowData, json),
           '</thead>',
           '<tbody>',
-            tbodyStr, 
+            tbodyStr,
           '</tbody>',
         '</table>'].join("");
       }
