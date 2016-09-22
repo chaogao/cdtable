@@ -154,14 +154,21 @@
         tbodyStr += str;
       });
 
-      html = ['<table class=\"' + (self.option.tableClass || '') + '\">',
-        '<thead>',
-          self.option.headerRow(rowData, json),
-        '</thead>',
-          tbodyStr,
-        '<tbody>',
-        '</tbody>',
-      '</table>'].join("");
+      if (self.option.isUL) {
+        html = ['<ul class=\"' + (self.option.ulClass || '') + '\">',
+            tbodyStr,
+        '</ul>'].join("");
+      } else {
+        html = ['<table class=\"' + (self.option.tableClass || '') + '\">',
+          '<thead>',
+            self.option.headerRow(rowData, json),
+          '</thead>',
+          '<tbody>',
+            tbodyStr, 
+          '</tbody>',
+        '</table>'].join("");
+      }
+
 
       self.$tableContainer.html(html);
     },
