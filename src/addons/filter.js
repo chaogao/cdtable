@@ -6,7 +6,7 @@
           '<span class="cdtable-filter-select-name"><%= filters[i].label %></span>' +
           '<select name=\'<%= filters[i].name %>\'>' +
             '<% for (var j = 0; j < filters[i].datas.length; j++) { %>' +
-              '<option data-idx="<%= j %>" value=\'<%= filters[i].datas[j].value %>\'><%= filters[i].datas[j].name %></option>' +
+              '<option <% if (j == filters[i].activeIndex) { %>selected="selected"<% } %>  data-idx="<%= j %>" value=\'<%= filters[i].datas[j].value %>\'><%= filters[i].datas[j].name %></option>' +
             '<% } %>' +
           '</select>' +
         '</li>' +
