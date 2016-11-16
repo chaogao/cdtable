@@ -9,6 +9,7 @@ module.exports = function(grunt) {
         separator: ';',
         banner: '/*!\n' +
                 ' * cdtable v<%= pkg.version %>\n' +
+                ' * <%= pkg.description %>\n' +
                 ' * Copyright 2016-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
                 ' * Licensed under the MIT license\n' +
                 ' */\n',
@@ -38,7 +39,7 @@ module.exports = function(grunt) {
       tasks: ['concat', 'uglify']
     }
   });
-  
+
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');

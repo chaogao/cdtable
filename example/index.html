@@ -52,7 +52,7 @@
       }
 
       .cdtable-filter-container .cdtable-filter-raw-item-active a{
-        color: #fa0;        
+        color: #fa0;
       }
 
       .cdtable-filter-container ul {
@@ -144,7 +144,7 @@
           border-left: 0;
           margin-left: -1px
       }
-      
+
       .cdtable-date-container {
         margin-bottom: 10px;
       }
@@ -193,7 +193,7 @@
       }
 
       .cdtable-rank-container ul li {
-        display: inline-block;  
+        display: inline-block;
         color: #999;
         margin-right: 20px;
         cursor: pointer;
@@ -220,7 +220,7 @@
     <script src="/libs/jquery.js"></script>
     <script src="/libs/datetimepicker.js"></script>
     <script src="/dist/cdtable.js"></script>
-    
+
     <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="/libs/datetimepicker.css" media="screen" rel="stylesheet" type="text/css">
 
@@ -270,10 +270,11 @@
 
       var filterAddon = new cdtable.addons.Filter({
         container: '#cdtable-filter-container',
-        line: 1,
+        historyEnable: true,
         filters: [
           {
             name: 'usertype',
+            historyKey: 'usertype',
             datas: [
               { name: '不限', value: '0' },
               { name: '僵尸用户', value: '1' },
@@ -309,7 +310,7 @@
           name: 'defaul'                   // the display name of a item
         },{
           key: 'time',
-          name: 'time sorting',                  
+          name: 'time sorting',
           types: [                          // type is meant to provide different way of sorting
             cdtable.addons.Rank.Const.ASC,  // from low to high
             cdtable.addons.Rank.Const.DESC // from high to low
@@ -322,7 +323,8 @@
         rows: rows,
         getUrl: getUrl,
         getRowsData: getRowsData,
-        tableClass: 'table table-bordered'
+        tableClass: 'table table-bordered',
+        history: {key: 'my'}
       }).cdtable().setAddons([
         filterAddon, searchAddon, dateAddon, paginationAddon, rankAddon
       ]).getTable();

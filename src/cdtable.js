@@ -16,9 +16,91 @@
     this.option = option;
     this.$el = $(el).addClass('cdtable-root-container');
     this._initEvent();
+    this._firstGet = 1;
+    this._bindHistory();
   }
 
   $.extend(CdTable.prototype, {
+    /**
+     * 获取history配置
+     */
+    getHistoryOpt: function () {
+      if (this.option.history && this.option.history.key) {
+        return this.option.history;
+      }
+
+      return false;
+    },
+
+    /**
+     * 绑定 History
+     */
+    _bindHistory: function () {
+      var self = this,
+        history = self.option.history;
+
+      // 初始化的 hash
+      var hash =  History.getState().hash;
+      if (hash) {
+        historyOpt = cdtable.tools.url.getParamMap(hash);
+        self.historyOpt = historyOpt;
+      }
+
+      History.Adapter.bind(window, 'statechange', function() {
+        var State = History.getState();
+        var historyOpt = cdtable.tools.url.getParamMap(State.hash);
+
+        self.historyOpt = historyOpt;
+        self._disptachHistory(historyOpt);
+      });
+    },
+
+    getHistoryValue: function (key) {
+      if (this.historyOpt) {
+        return this.historyOpt[key];
+      }
+    },
+
+    setHistory: function (key, value) {
+      var self = this;
+
+      self.historyOpt = self.historyOpt || {};
+
+      // 和以前的一样不需要改变
+      if (self.historyOpt[key] == value) {
+        return;
+      }
+
+      // 改变原始 hash
+      self.historyOpt[key] = value;
+
+      // 防止立即执行
+      self._pushTimer && clearTimeout(self._pushTimer);
+
+      self._pushTimer = setTimeout(function () {
+        self._pushHistory();
+      }, 5);
+    },
+
+    _pushHistory: function () {
+      var self = this;
+
+      var historyOpt = self.historyOpt;
+      var param = $.param(historyOpt);
+
+      var stateCurrent = History.getState();
+
+      // debugger;
+
+      console.log('push:' + param);
+
+      History.pushState(null, null, '?' + param);
+    },
+
+    _disptachHistory: function (data) {
+      this.$el.trigger('cdtable.hashchange', [data]);
+    },
+
     /**
      * 监听事件
      */
@@ -62,6 +144,8 @@
       // 拼装插件配置
       var urlData = {};
       $.each(this.addons, function (key) {
+        // 两种不用改变 hash 的情况
+        // 其实都是对初始状态进行判断
         urlData[key] = this.getAddonData();
       });
 
@@ -78,6 +162,7 @@
           var rowData = self.option.getRowsData(json);
 
           self._endLoading(json);
+          self._firstGet = false;
 
           if (rowData && rowData.length) {
             self._render(rowData, json);
@@ -110,7 +195,7 @@
     _isLoading: function () {
       return this.__load_state == STAT_LOADING;
     },
-    
+
     /**
      * 开始获取数据
      */
@@ -136,7 +221,7 @@
      * 表格主体的渲染函数
      */
     _render: function (rowData, json) {
-      var self = this, 
+      var self = this,
         html;
 
       var tbodyStr = '';
@@ -183,7 +268,7 @@
         if (addon[item] === undefined) {
           f = false;
           return false;
-        } 
+        }
       });
 
       return f;
@@ -191,7 +276,7 @@
 
     /**
      * 设置 table 组件的插件列表 , 设置完毕后会初始化各个 addon 的 ui
-     * @param 
+     * @param
      */
     setAddons: function (addonsList) {
       var self = this;
@@ -219,26 +304,26 @@
    * 注意以下几点:
    * headerRow 函数返回的 html 数据中 td 的个数，必须与 rows 函数 td 个数一致
    * @param {object}   option 插件配置参数
-   * @param {function} option.headerRow 表头回调函数，返回表头 html 
+   * @param {function} option.headerRow 表头回调函数，返回表头 html
    * @param {function} option.rows 每行内容回调函数，返回没行的 html
    *
-   * @param {function} option.getUrl 返回获取数据的 url 
-   * eg. 
+   * @param {function} option.getUrl 返回获取数据的 url
+   * eg.
    * function (option) {
    *   var currentPage = option.pagination.current;
    *   var filterArr = option.filter.data;
    *
    *   return '/api/getList?page=' + currentPage + $.param(filterArr);
    * }
-   * 
+   *
    * @param {function} option.getRowsData 获取当前 ajax 请求的 rows 数据
-   * eg. 
+   * eg.
    * function (json) {
    *   // 判断当前请求是否有数组数据，如果有则返回, 没有的话就返回 false
    *   if (json.data) {
    *     return json.data
    *   }
-   * 
+   *
    *   return false
    * }
    *
