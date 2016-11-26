@@ -40,7 +40,7 @@
         history = self.option.history;
 
       // 初始化的 hash
-      var hash =  History.getState().hash;
+      var hash =  decodeURIComponent(History.getState().hash);
       if (hash) {
         historyOpt = cdtable.tools.url.getParamMap(hash);
         self.historyOpt = historyOpt;
@@ -48,10 +48,14 @@
 
       History.Adapter.bind(window, 'statechange', function() {
         var State = History.getState();
-        var historyOpt = cdtable.tools.url.getParamMap(State.hash);
+        var historyOpt = cdtable.tools.url.getParamMap(decodeURIComponent(State.hash));
 
         self.historyOpt = historyOpt;
-        self._disptachHistory(historyOpt);
+
+        if (!self.preventDisptach) {
+          self._disptachHistory(historyOpt);
+        }
+        self.preventDisptach = undefined;
       });
     },
 
@@ -61,7 +65,7 @@
       }
     },
 
-    setHistory: function (key, value) {
+    setHistory: function (key, value, preventDisptach) {
       var self = this;
 
       self.historyOpt = self.historyOpt || {};
@@ -71,29 +75,66 @@
         return;
       }
 
-      // 改变原始 hash
-      self.historyOpt[key] = value;
+      self._pushAction(function () {
+        self.historyOpt[key] = value;
+      });
 
       // 防止立即执行
       self._pushTimer && clearTimeout(self._pushTimer);
-
       self._pushTimer = setTimeout(function () {
-        self._pushHistory();
+        // 改变原始 hash
+        self._pushHistory(preventDisptach);
       }, 5);
     },
 
-    _pushHistory: function () {
+    removeHistory: function (key, preventDisptach) {
       var self = this;
+
+      if (!self.historyOpt) {
+        return;
+      }
+
+      // 防止立即执行
+      self._pushAction(function () {
+        delete self.historyOpt[key];
+      });
+
+      self._pushTimer && clearTimeout(self._pushTimer);
+      self._pushTimer = setTimeout(function () {
+        self._pushHistory(preventDisptach);
+      }, 5);
+    },
+
+    _pushAction: function (cb) {
+      var self = this;
+
+      self._actions = self._actions || [];
+      self._actions.push(cb);
+    },
+
+    _doAction: function () {
+      var self = this;
+
+      self._actions.forEach(function (a) {
+        a.apply(self);
+      });
+
+      self._actions = [];
+    },
+
+    _pushHistory: function (preventDisptach) {
+      var self = this;
+
+      self._doAction();
 
       var historyOpt = self.historyOpt;
       var param = $.param(historyOpt);
-
       var stateCurrent = History.getState();
 
       // debugger;
 
       console.log('push:' + param);
-
+      self.preventDisptach = preventDisptach;
       History.pushState(null, null, '?' + param);
     },
 
@@ -160,6 +201,8 @@
         // 成功回调处理
         self.ajaxInstance.done(function (json) {
           var rowData = self.option.getRowsData(json);
+
+          self.$el.trigger('cdtable.loadeddata', [json]);
 
           self._endLoading(json);
           self._firstGet = false;

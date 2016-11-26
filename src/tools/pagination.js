@@ -51,7 +51,7 @@
             '<% } %>' +
         '</div>';
 
-    $.extend(Pagination.prototype, 
+    $.extend(Pagination.prototype,
     /** @lends module:jsmod/ui/pagination.prototype */
     {
         /**
@@ -84,7 +84,7 @@
          * @param {int} page 当前页
          * @fires module:jsmod/ui/pagination#page
          */
-        setPage: function(page) {
+        setPage: function(page, preventDisptach) {
             var self = this,
                 html, e;
 
@@ -98,7 +98,9 @@
              * @type {object}
              * @property {int} page 当前设定的page值
              */
-            $(self).trigger(e, [{page: self.currentPage}]);
+            if (!preventDisptach) {
+              $(self).trigger(e, [{page: self.currentPage}]);
+            }
         },
         /**
          * 获取当前的 page
@@ -201,7 +203,7 @@
                             page: "-"
                         });
                     }
-                });   
+                });
             }
 
             // 处理页面信息

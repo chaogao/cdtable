@@ -101,7 +101,7 @@
           $(this).addClass('cdtable-filter-raw-item-active')
             .siblings().removeClass('cdtable-filter-raw-item-active');
 
-          self.root.$el.trigger('cdtable.filter.change');
+          self.root.$el.trigger('cdtable.filter.change', [preventSet]);
           self.root.$el.trigger('cdtable.reflow');
 
           // 设置 filter 的 hash
@@ -109,7 +109,7 @@
             var key = $(this).attr('data-name');
             var value = $(this).attr('data-value');
 
-            self._setHash(key, value);
+            self._setHash(key, value, true);
           }
         });
 
@@ -118,7 +118,7 @@
         });
       } else {
         self._getContainer().delegate('select', 'change', function (e, preventSet) {
-          self.root.$el.trigger('cdtable.filter.change');
+          self.root.$el.trigger('cdtable.filter.change', [preventSet]);
           self.root.$el.trigger('cdtable.reflow');
 
           // 设置 filter 的 hash
@@ -126,7 +126,7 @@
             var key = $(this).prop('name');
             var value = $(this).val();
 
-            self._setHash(key, value);
+            self._setHash(key, value, true);
           }
         });
 
@@ -213,7 +213,9 @@
 
             // 判定是否相等
             // 如果不相等需要改变 当前显示，并派发请求
-            if (hashData[historyKey] != currentData[key]) {
+            var hashValue = hashData[historyKey] || filter.datas[filter.activeIndex].value;
+
+            if (hashValue != currentData[key]) {
               if (self.option.line) {
                 var value = hashData[historyKey] || filter.datas[filter.activeIndex].value;
 
